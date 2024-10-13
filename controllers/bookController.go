@@ -30,6 +30,14 @@ func CreateBook(context *gin.Context) {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+	if book.PublishYear <= 0 {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "Publish year should be greater than 0."})
+		return
+	}
+	if book.Title == "" || book.Author == "" || book.Gender == "" {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "Title, Gender and Author can't be empty."})
+		return
+	}
 	models.DB.Create(&book)
 	context.JSON(http.StatusCreated, book)
 }
